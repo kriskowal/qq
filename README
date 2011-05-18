@@ -1,0 +1,3 @@
+Provides heavy-weight extensions to the Q API for using
+asynchronous promises, both in the browser and in CommonJS
+module systems like NodeJS.

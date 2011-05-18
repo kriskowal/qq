@@ -1,0 +1,36 @@
+{
+    "name": "qq",
+    "description": "A heavy-weight library for promises, based on Q",
+    "version": "0.1.0",
+    "homepage": "http://github.com/kriskowal/qq/",
+    "author": "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
+    "credits": [
+        "Mark S. Miller, Google Inc.",
+        "Edud (Udi) Shapiro"
+    ],
+    "bugs": {
+        "mail": "kris@cixar.com",
+        "web": "http://github.com/kriskowal/qq/issues"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://github.com/kriskowal/qq/raw/master/LICENSE"
+        }
+    ],
+    "main": "qq.js",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/kriskowal/qq.git"
+    },
+    "engines": {
+        "node": ">=0.2.0",
+        "teleport": ">=0.2.0"
+    },
+    "dependencies": {
+        "q": ">=0.4.0"
+    },
+    "devDependencies": {
+        "test": ">=0.1.0"
+    }
+}
