@@ -201,32 +201,24 @@ function consolidate(object, deep) {
             object instanceof Date
         ) {
             return object;
-        } else if (Array.isArray(object)) {
-            return reduceLeft(object, function (values, value) {
-                return Q.when(deep(value), function (value) {
-                    return values.concat([value]);
-                });
-            }, []);
         } else {
-            var result = {};
             var synchronize;
-            for (var name in object) {
-                if (has.call(object, name)) {
-                    (function (name, value) {
-                        synchronize = Q.when(synchronize, function () {
-                            return Q.when(deep(value), function (value) {
-                                result[name] = value;
-                            });
+            for (var i in object) {
+                (function (i, value) {
+                    synchronize = Q.when(synchronize, function () {
+                        return Q.when(deep(value), function (value) {
+                            object[i] = value;
                         });
-                    })(name, object[name]);
-                }
+                    });
+                })(i, object[i]);
             }
             return Q.when(synchronize, function () {
-                return result;
+                return object;
             });
         }
     });
 }
+
 
 /**
  *  The reduce methods all have the signature of `reduce` on

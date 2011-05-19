@@ -20,6 +20,15 @@ var Q = require('qq');
     }
 });
 
+exports['test deep'] = function (ASSERT, done) {
+    var before = [{"a": Q.ref(10)}, Q.ref(20)];
+    Q.when(Q.deep(before), function (after) {
+        ASSERT.ok(before === after, 'array modified in place');
+        ASSERT.ok(before[0] === after[0], 'object modified in place');
+        ASSERT.deepEqual(after, [{"a": 10}, 20], 'deeply equal afterward');
+    }).then(done, done);
+};
+
 if (module == require.main)
     require('test').run(exports)
 
