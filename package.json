@@ -1,7 +1,7 @@
 {
     "name": "qq",
     "description": "A heavy-weight library for promises, based on Q",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "homepage": "http://github.com/kriskowal/qq/",
     "author": "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
     "credits": [
