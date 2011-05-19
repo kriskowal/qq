@@ -312,6 +312,24 @@ function reduce(values, callback, accumulator, that) {
     return reduction.promise;
 }
 
+exports.Lazy = function (constructor, promise) {
+    var prototype = constructor.prototype;
+    var result = exports.defer();
+    result.resolve(promise);
+    var proxy = Object.create(result.promise);
+    while (prototype !== Object.prototype) {
+        Object.getOwnPropertyNames(prototype).forEach(function (name) {
+            if (typeof prototype[name] === "function") {
+                proxy[name] = function () {
+                    return Q.post(result.promise, name, arguments);
+                };
+            }
+        });
+        prototype = Object.getPrototypeOf(prototype);
+    }
+    return proxy;
+};
+
 // boilerplate that permits this module to be used as a
 // <script> in less-than-ideal situations.
 }).apply(this, typeof exports !== "undefined" ? [
