@@ -309,15 +309,23 @@ exports.Lazy = function (constructor, promise) {
     var result = exports.defer();
     result.resolve(promise);
     var proxy = Object.create(result.promise);
-    while (prototype !== Object.prototype) {
-        Object.getOwnPropertyNames(prototype).forEach(function (name) {
-            if (typeof prototype[name] === "function") {
-                proxy[name] = function () {
-                    return Q.post(result.promise, name, arguments);
-                };
-            }
-        });
-        prototype = Object.getPrototypeOf(prototype);
+    var forward = function (name) {
+        proxy[name] = function () {
+            var args = Array.prototype.slice.call(arguments);
+            return Q.post(result.promise, name, args);
+        };
+    };
+    if (Array.isArray(constructor)) {
+        constructor.forEach(forward);
+    } else {
+        while (prototype !== Object.prototype) {
+            Object.getOwnPropertyNames(prototype).forEach(function (name) {
+                if (typeof prototype[name] === "function") {
+                    forward(name);
+                }
+            });
+            prototype = Object.getPrototypeOf(prototype);
+        }
     }
     return proxy;
 };
