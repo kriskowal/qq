@@ -11,6 +11,13 @@ for (var name in Q) {
     }
 }
 
+// ES5 shim
+var isArray =
+    Array.isArray =
+    Array.isArray || function (object) {
+    return Object.prototype.toString.call(o) === "[object Array]";
+};
+
 // Copyright (C) 2010 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -204,13 +211,15 @@ function consolidate(object, deep) {
         } else {
             var synchronize;
             for (var i in object) {
-                (function (i, value) {
-                    synchronize = Q.when(synchronize, function () {
-                        return Q.when(deep(value), function (value) {
-                            object[i] = value;
+                if (Object.prototype.hasOwnProperty.call(object, i)) {
+                    (function (i, value) {
+                        synchronize = Q.when(synchronize, function () {
+                            return Q.when(deep(value), function (value) {
+                                object[i] = value;
+                            });
                         });
-                    });
-                })(i, object[i]);
+                    })(i, object[i]);
+                }
             }
             return Q.when(synchronize, function () {
                 return object;
@@ -315,7 +324,7 @@ exports.Lazy = function (constructor, promise) {
             return Q.post(result.promise, name, args);
         };
     };
-    if (Array.isArray(constructor)) {
+    if (isArray(constructor)) {
         constructor.forEach(forward);
     } else {
         while (prototype !== Object.prototype) {
