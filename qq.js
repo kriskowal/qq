@@ -127,7 +127,7 @@ exports.join = function () {
  * @returns {Promise}
  */
 exports.step = function () {
-    return Array.prototype.reduce.call(
+    return reduceShim.call(
         arguments,
         function (value, callback) {
             return Q.when(deep(value), function (value) {
@@ -337,6 +337,32 @@ exports.Lazy = function (constructor, promise) {
         }
     }
     return proxy;
+};
+
+var reduceShim = Array.prototype.reduce || function (callback, basis) {
+    var i = 0,
+        ii = this.length;
+    // concerning the initial value, if one is not provided
+    if (arguments.length == 1) {
+        // seek to the first value in the array, accounting
+        // for the possibility that is is a sparse array
+        do {
+            if (i in this) {
+                basis = this[i++];
+                break;
+            }
+            if (++i >= ii)
+                throw new TypeError();
+        } while (1);
+    }
+    // reduce
+    for (; i < ii; i++) {
+        // account for the possibility that the array is sparse
+        if (i in this) {
+            basis = callback(basis, this[i], i);
+        }
+    }
+    return basis;
 };
 
 // boilerplate that permits this module to be used as a
