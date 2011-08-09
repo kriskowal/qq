@@ -1,4 +1,31 @@
-(function (require, exports) {
+(function (definition, undefined) {
+
+    // This file will function properly as a <script> tag, or a module
+    // using CommonJS and NodeJS or RequireJS module formats.  In
+    // Common/Node/RequireJS, the module exports the QQ API and when
+    // executed as a simple <script>, it creates a QQ global instead.
+
+    // The use of "undefined" in the arguments is a
+    // micro-optmization for compression systems, permitting
+    // every occurrence of the "undefined" variable to be
+    // replaced with a single-character.
+
+    // RequireJS
+    if (typeof define === "function") {
+        define(function (require, exports, module) {
+            definition(require, exports, module);
+        });
+    // CommonJS
+    } else if (typeof exports === "object") {
+        definition(require, exports, module);
+    // <script>
+    } else {
+        definition(function (id) {
+            return Q;
+        }, QQ = {}, {});
+    }
+
+})(function (require, exports, module, undefined) {
 
 var Q = require("q");
 
@@ -62,7 +89,6 @@ function Queue() {
                 closed.resolve();
                 return Q.reject(reason);
             });
-            return result;
         },
         "closed": closed.promise,
         "close": function (reason) {
@@ -365,13 +391,4 @@ var reduceShim = Array.prototype.reduce || function (callback, basis) {
     return basis;
 };
 
-// boilerplate that permits this module to be used as a
-// <script> in less-than-ideal situations.
-}).apply(this, typeof exports !== "undefined" ? [
-    require, exports
-] : [
-    function () {
-        return Q;
-    },
-    QQ = {}
-]);
+});
