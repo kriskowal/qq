@@ -42,7 +42,7 @@ for (var name in Q) {
 var isArray =
     Array.isArray =
     Array.isArray || function (object) {
-    return Object.prototype.toString.call(o) === "[object Array]";
+    return Object.prototype.toString.call(object) === "[object Array]";
 };
 
 // Copyright (C) 2010 Google Inc.
