@@ -1,5 +1,9 @@
 # vim:ts=4:sts=4:sw=4:et:tw=60
 
+0.3.2
+ - Synchronized Q dependency for bug fix to thenable
+   assimilation.
+
 0.3.1
  - Added support for RequireJS.
  - Stopped depending on Q to provide a shim for
